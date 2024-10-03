@@ -55,7 +55,8 @@
 ///          - fuite d'eau
 ///          - bandits
 ///          - Tempête de neige
-///          - Surchauffe moteur
+///          - Surchauffe moteur (lier à l'événement fuite d'eau)
+///          - Explosion du moteur (lier à l'événement fuite d'eau)
 
 namespace Jeu_du_chameau
 {
