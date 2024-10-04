@@ -45,6 +45,11 @@
 
 
 
+
+
+
+
+
 /// Itération GD du jeu du chameau :
 /// Le joueur est conducteur d'un train à vapeur et il devra gérer le moteur de sa locomotive et son énergie pour remplir le moteur en charbon et en eau.
 /// Le train peut avancer à vitesse normal cela consomme un charbon et un d'eau.
@@ -52,13 +57,11 @@
 /// La nourriture du joueur sert durant la journée pour le contrôle le train.
 /// à la fin de chaque tour le train récupère un peu de charbon et un peu d'eau pour continuer le voyage.
 /// rajouter un choix d'éguillage.
-
 /// Gestion de l'état :
 ///          - nourriture pour le joueur. 
 ///          - eau de refroidissement moteur du train.
 ///          - Charbon pour faire avancer le train.
 ///          - La distance restante à parcourir.
-
 /// événement aléatoire :
 ///          - Panne de charbon (parce que l'on a mal géré notre réserve de charbon).
 ///          - fuite d'eau
@@ -67,7 +70,10 @@
 ///          - Surchauffe moteur (lier à l'événement fuite d'eau)
 ///          - Seulement si possible : Explosion du moteur (lier à l'événement fuite d'eau)
 
-///
+using Microsoft.VisualBasic.FileIO;
+using System;
+using System.Collections;
+
 namespace Jeu_du_chameau
 {
     internal class Program
@@ -77,6 +83,8 @@ namespace Jeu_du_chameau
         static int charbon = 10;
         static int nourriture = 20;
         static int distance = 250;
+
+        static Random random = new Random();
 
         public static void Main()
         {
@@ -204,27 +212,21 @@ namespace Jeu_du_chameau
 
         public static void Evenment(Random random)
         {
-            
-
             switch (random.Next(0, 5))
             {
                 case 1:
-                    Console.WriteLine("Oh non, on va manquer de charbon !");
                     probChar();
                     break;
 
                 case 2:
-                    Console.WriteLine("Oh non, le réservoire d'eau à une fuite !");
                     probEau();
                     break;
 
                 case 3:
-                    Console.WriteLine("Oh non, des bandits nous attaque !");
                     probBan();
                     break;
 
                 case 4:
-                    Console.WriteLine("Oh non, on va traverser une tempête de neige !");
                     probNei();
                     break;
             }
@@ -232,22 +234,22 @@ namespace Jeu_du_chameau
 
         public static void probChar()
         {
-
+            Console.WriteLine("Oh non, on va manquer de charbon !");
         }
 
         public static void probEau()
         {
-
+            Console.WriteLine("Oh non, le réservoire d'eau à une fuite !");
         }
 
         public static void probBan()
         {
-
+            Console.WriteLine("Oh non, des bandits nous attaque !");
         }
 
         public static void probNei()
         {
-
+            Console.WriteLine("Oh non, on va traverser une tempête de neige !");
         }
 
         public static void Die()
