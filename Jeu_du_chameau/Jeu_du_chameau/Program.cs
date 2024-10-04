@@ -223,11 +223,11 @@ namespace Jeu_du_chameau
                     break;
 
                 case Events.Bandits:
-                    Console.WriteLine();
+                    Console.WriteLine("");
                     break;
 
                 case Events.Neige:
-                    Console.WriteLine();
+                    Console.WriteLine("");
                     break;
             }
         }
