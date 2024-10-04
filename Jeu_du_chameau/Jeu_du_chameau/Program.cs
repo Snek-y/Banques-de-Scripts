@@ -72,6 +72,8 @@ namespace Jeu_du_chameau
         static int charbon = 10;
         static int nourriture = 20;
         static int distance = 250;
+        static Random rnd = new Random();
+
         //static string[] spéciaux = new string[] { "Surchauffe moteur", "Explosion de moteur" };
 
         public static void Main()
@@ -200,12 +202,19 @@ namespace Jeu_du_chameau
 
         public static void Evenment()
         {
-            string[] events = { "panne de charbon", "fuite d'eau", "bandits", "Tempête de neige" };
-            
-            for (int i = 0; i < events.GetLength(0); i++)
+            switch (rnd.Next(0, 5))
             {
-                Console.WriteLine("Ho non, " + events[i] + " !");
-                Command();
+                case 1:
+                    break;
+
+                case 2:
+                    break;
+
+                case 3:
+                    break;
+
+                case 4:
+                    break;
             }
         }
 
