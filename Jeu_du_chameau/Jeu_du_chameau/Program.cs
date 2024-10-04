@@ -43,6 +43,8 @@
 
 
 
+using System.Security.Cryptography.X509Certificates;
+
 /// Itération GD du jeu du chameau :
 /// Le joueur est conducteur d'un train à vapeur et il devra gérer le moteur de sa locomotive et son énergie pour remplir le moteur en charbon et en eau.
 /// Le train peut avancer à vitesse normal cela consomme un charbon et un d'eau.
@@ -70,8 +72,8 @@ namespace Jeu_du_chameau
         static int charbon = 10;
         static int nourriture = 20;
         static int distance = 250;
-
-        //static var rand = new Random();
+        static string[] events = new string[] { "panne de charbon", "fuite d'eau", "bandits", "Tempête de neige" };
+        static List<string> spéciaux = new List<string>() { "Surchauffe moteur", "Explosion de moteur" };
 
         public static void Main()
         {
@@ -201,7 +203,14 @@ namespace Jeu_du_chameau
 
         public static void Evenment()
         {
-            
+            for (int i = 0; i < events.Length; i++)
+            {
+                if (events[i] == "")
+                {
+                    Console.WriteLine("Ho non, " + events[i] + " !");
+                    break;
+                }
+            }
         }
 
         public static void Die()
