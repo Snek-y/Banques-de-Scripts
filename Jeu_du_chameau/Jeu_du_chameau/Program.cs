@@ -80,32 +80,33 @@ namespace Jeu_du_chameau
             Command();
         }
 
+        // Texte d'histoire et d'explication pour le joueur
         public static void Debut()
         {
-            Console.WriteLine("");
-            Console.WriteLine("");
-            Console.WriteLine("");
-            Console.WriteLine("");
+            Console.WriteLine("Le monde dans lequelle vous vous trouvez a été détruits durant la dernière guerre.");
+            Console.WriteLine("seul vous et votre train êtes encore en vie");
+            Console.WriteLine("Vous venez de la ville de et votre voyage doit vous emenez jusqu'à la ville de , elle est connue comme étant la seule ville encore debout");
 
-            Console.WriteLine("Tu as le choix entre 4 commandes : ");
+            Console.WriteLine("Pour conduire ton train tu as le choix entre 3 commandes : ");
             Console.WriteLine(" a : La première consiste à faire avancer ton train à la vitesse normal.");
             Console.WriteLine(" b : La seconde consiste à faire avancer ton train à plus grande vitesse.");
             Console.WriteLine(" c : La dernière qui te permet d'afficher le gestionnaire d'état.");
             Console.WriteLine("Que fais-tu ?");
         }
 
+        // Appeler au début du jeu grâce au Main() et permet de récupérer les touches du joueur
         public static void Command()
         {
             switch (Console.ReadLine())
             {
                 case "a":
                     Console.WriteLine("tu avance de 1");
-                    Suite1();
+                    Vitesse1();
                     break;
 
                 case "b":
                     Console.WriteLine("Tu avance de 2");
-                    Suite2();
+                    Vitesse2();
                     break;
 
                 case "c": 
@@ -114,7 +115,8 @@ namespace Jeu_du_chameau
                     break;
             }
         }
-
+        
+        // permet d'afficher l'ui quand il est appeler
         public static void UI()
         {
             Console.WriteLine("Eau : reste " + eau + " d'eau");
@@ -124,7 +126,8 @@ namespace Jeu_du_chameau
             Command();
         }
 
-        public static void Suite1()
+
+        public static void Vitesse1()
         {
             eau -= 1;
             charbon -= 1;
@@ -140,7 +143,7 @@ namespace Jeu_du_chameau
             }
         }
 
-        public static void Suite2()
+        public static void Vitesse2()
         {
             eau -= 2;
             charbon -= 2;
