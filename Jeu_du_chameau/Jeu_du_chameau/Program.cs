@@ -199,9 +199,9 @@ namespace Jeu_du_chameau
         {
             string[] events = { "panne de charbon", "fuite d'eau", "bandits", "Tempête de neige" };
             
-            for (int i = 0; i < events.Length; i++)
+            for (int i = 0; i < events.GetLength(0); i++)
             {
-                Console.WriteLine("Ho non, " + i.ToString() + " !");
+                Console.WriteLine("Ho non, " + events[i] + " !");
                 Command();
             }
         }
