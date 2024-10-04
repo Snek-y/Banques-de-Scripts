@@ -85,6 +85,7 @@ namespace Jeu_du_chameau
         static int distance = 250;
 
         static Random random = new Random();
+        static Random fuite = new Random();
 
         public static void Main()
         {
@@ -103,7 +104,7 @@ namespace Jeu_du_chameau
             Console.WriteLine(" a : La première consiste à faire avancer ton train à la vitesse normal.");
             Console.WriteLine(" b : La seconde consiste à faire avancer ton train à plus grande vitesse.");
             Console.WriteLine(" c : La dernière qui te permet d'afficher le gestionnaire d'état.");
-            Console.WriteLine("Que fais-tu ?");
+            Console.WriteLine("Que veux-tu faire ?");
         }
 
         // Appeler au début du jeu grâce au Main() et permet de récupérer les touches du joueur
@@ -125,6 +126,13 @@ namespace Jeu_du_chameau
                     Console.WriteLine("Gestionnaire de l'UI");
                     UI();
                     break;
+                
+                default:
+                    Console.WriteLine("Tu t'ai trompé de touche !");
+                    Console.WriteLine("Que veux-tu faire ?");
+                    Console.WriteLine("Tu as le choix entre : a, b ou c");
+                    Command();
+                    break;
             }
         }
         
@@ -145,6 +153,8 @@ namespace Jeu_du_chameau
             charbon -= 1;
             distance -= 1;
 
+            Evenment(random);
+
             if (eau > 0)
             {
                 Command();
@@ -160,6 +170,8 @@ namespace Jeu_du_chameau
             eau -= 2;
             charbon -= 2;
             distance -= 2;
+
+            Evenment(random);
 
             if (eau > 0)
             {
@@ -191,6 +203,13 @@ namespace Jeu_du_chameau
 
                 case "n":
                     break;
+
+                default:
+                    Console.WriteLine("Tu t'ai trompé de touche !");
+                    Console.WriteLine("Que veux-tu faire ?");
+                    Console.WriteLine("Tu as le choix entre : y ou n");
+                    Nuit();
+                    break;
             }
         }
 
@@ -212,14 +231,16 @@ namespace Jeu_du_chameau
 
         public static void Evenment(Random random)
         {
-            switch (random.Next(0, 5))
+            int eventNum = random.Next(0, 5);
+
+            switch (eventNum)
             {
                 case 1:
                     probChar();
                     break;
 
                 case 2:
-                    probEau();
+                    probEau(fuite);
                     break;
 
                 case 3:
@@ -229,6 +250,10 @@ namespace Jeu_du_chameau
                 case 4:
                     probNei();
                     break;
+                    
+                default :
+                    Console.WriteLine("Il ne se passe rien aujourd'hui !");
+                    break;
             }
         }
 
@@ -237,9 +262,20 @@ namespace Jeu_du_chameau
             Console.WriteLine("Oh non, on va manquer de charbon !");
         }
 
-        public static void probEau()
+        public static void probEau(Random fuite)
         {
-            Console.WriteLine("Oh non, le réservoire d'eau à une fuite !");
+            int eventNum = fuite.Next(0, 5);
+            switch (eventNum)
+            {
+                case 1:
+                    Console.WriteLine("Oh non, le réservoire d'eau à une fuite !");
+                    Console.WriteLine("Regarde avec la touche c pour vérifier ce qu'il te reste en eau !");
+                    break;
+                    
+                case 2:
+                    Console.WriteLine("Il ne se passe rien aujourd'hui !");
+                    break;
+            }
         }
 
         public static void probBan()
@@ -258,6 +294,7 @@ namespace Jeu_du_chameau
             Console.WriteLine("Veux-tu recommencer ?");
             Console.WriteLine(" y : yes.");
             Console.WriteLine(" n : no.");
+            Console.Beep();
             Retry();
         }
 
@@ -274,6 +311,13 @@ namespace Jeu_du_chameau
                     break;
 
                 case "n":
+                    break;
+                    
+                default:
+                    Console.WriteLine("Tu t'ai trompé de touche !");
+                    Console.WriteLine("Que veux-tu faire ?");
+                    Console.WriteLine("Tu as le choix entre : y ou n");
+                    Die();
                     break;
             }
         }
