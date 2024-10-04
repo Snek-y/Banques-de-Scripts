@@ -65,6 +65,14 @@
 ///          - Explosion du moteur (lier à l'événement fuite d'eau)
 namespace Jeu_du_chameau
 {
+    public enum Events
+    {
+        Panne,
+        Fuite,
+        Bandits,
+        Neige
+    }
+
     internal class Program
     {
         // pour garder en mémoire le nombre d'eau, de nourriture et de fatigue des personnages
@@ -202,18 +210,24 @@ namespace Jeu_du_chameau
 
         public static void Evenment()
         {
-            switch (rnd.Next(0, 5))
+            Events e = (Events)(new Random()).Next(0, 4);
+
+            switch (e)
             {
-                case 1:
+                case Events.Panne:
+                    Console.WriteLine("Ho non, on va manquer de charbon !");
                     break;
 
-                case 2:
+                case Events.Fuite:
+                    Console.WriteLine("Ho non, le réservoire d'eau à une fuite !");
                     break;
 
-                case 3:
+                case Events.Bandits:
+                    Console.WriteLine();
                     break;
 
-                case 4:
+                case Events.Neige:
+                    Console.WriteLine();
                     break;
             }
         }
