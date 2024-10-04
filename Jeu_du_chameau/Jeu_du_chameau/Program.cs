@@ -73,7 +73,7 @@ namespace Jeu_du_chameau
         static int nourriture = 20;
         static int distance = 250;
         static string[] events = new string[] { "panne de charbon", "fuite d'eau", "bandits", "Tempête de neige" };
-        static List<string> spéciaux = new List<string>() { "Surchauffe moteur", "Explosion de moteur" };
+        static string[] spéciaux = new string[] { "Surchauffe moteur", "Explosion de moteur" };
 
         public static void Main()
         {
