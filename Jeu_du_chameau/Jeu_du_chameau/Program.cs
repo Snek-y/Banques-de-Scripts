@@ -79,6 +79,7 @@ namespace Jeu_du_chameau
         {
             Debut();
             Command();
+            Evenment();
 
             /*if () 
             {
@@ -205,7 +206,7 @@ namespace Jeu_du_chameau
         {
             for (int i = 0; i < events.Length; i++)
             {
-                if (events[i] == "")
+                if (events[i] == "panne de charbon")
                 {
                     Console.WriteLine("Ho non, " + events[i] + " !");
                     break;
