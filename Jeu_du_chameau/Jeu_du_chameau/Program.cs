@@ -51,28 +51,25 @@
 /// Le train peut avancer à vitesse rapide cela consomme deux charbons et deux d'eau.
 /// La nourriture du joueur sert durant la journée pour le contrôle le train.
 /// à la fin de chaque tour le train récupère un peu de charbon et un peu d'eau pour continuer le voyage.
+/// rajouter un choix d'éguillage.
+
 /// Gestion de l'état :
 ///          - nourriture pour le joueur. 
 ///          - eau de refroidissement moteur du train.
 ///          - Charbon pour faire avancer le train.
 ///          - La distance restante à parcourir.
+
 /// événement aléatoire :
-///          - Panne de charbon
+///          - Panne de charbon (parce que l'on a mal géré notre réserve de charbon).
 ///          - fuite d'eau
 ///          - bandits
 ///          - Tempête de neige
 ///          - Surchauffe moteur (lier à l'événement fuite d'eau)
-///          - Explosion du moteur (lier à l'événement fuite d'eau)
+///          - Seulement si possible : Explosion du moteur (lier à l'événement fuite d'eau)
+
+///
 namespace Jeu_du_chameau
 {
-    public enum Events
-    {
-        Panne,
-        Fuite,
-        Bandits,
-        Neige
-    }
-
     internal class Program
     {
         // pour garder en mémoire le nombre d'eau, de nourriture et de fatigue des personnages
@@ -80,9 +77,6 @@ namespace Jeu_du_chameau
         static int charbon = 10;
         static int nourriture = 20;
         static int distance = 250;
-        static Random rnd = new Random();
-
-        //static string[] spéciaux = new string[] { "Surchauffe moteur", "Explosion de moteur" };
 
         public static void Main()
         {
@@ -208,28 +202,52 @@ namespace Jeu_du_chameau
             }
         }
 
-        public static void Evenment()
+        public static void Evenment(Random random)
         {
-            Events e = (Events)(new Random()).Next(0, 4);
+            
 
-            switch (e)
+            switch (random.Next(0, 5))
             {
-                case Events.Panne:
-                    Console.WriteLine("Ho non, on va manquer de charbon !");
+                case 1:
+                    Console.WriteLine("Oh non, on va manquer de charbon !");
+                    probChar();
                     break;
 
-                case Events.Fuite:
-                    Console.WriteLine("Ho non, le réservoire d'eau à une fuite !");
+                case 2:
+                    Console.WriteLine("Oh non, le réservoire d'eau à une fuite !");
+                    probEau();
                     break;
 
-                case Events.Bandits:
-                    Console.WriteLine("");
+                case 3:
+                    Console.WriteLine("Oh non, des bandits nous attaque !");
+                    probBan();
                     break;
 
-                case Events.Neige:
-                    Console.WriteLine("");
+                case 4:
+                    Console.WriteLine("Oh non, on va traverser une tempête de neige !");
+                    probNei();
                     break;
             }
+        }
+
+        public static void probChar()
+        {
+
+        }
+
+        public static void probEau()
+        {
+
+        }
+
+        public static void probBan()
+        {
+
+        }
+
+        public static void probNei()
+        {
+
         }
 
         public static void Die()
