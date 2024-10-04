@@ -71,10 +71,17 @@ namespace Jeu_du_chameau
         static int nourriture = 20;
         static int distance = 250;
 
+        //static var rand = new Random();
+
         public static void Main()
         {
             Debut();
             Command();
+
+            /*if () 
+            {
+                Nuit();
+            }*/
         }
 
         public static void Debut()
@@ -87,8 +94,7 @@ namespace Jeu_du_chameau
             Console.WriteLine("Tu as le choix entre 4 commandes : ");
             Console.WriteLine(" a : La première consiste à faire avancer ton train à la vitesse normal.");
             Console.WriteLine(" b : La seconde consiste à faire avancer ton train à plus grande vitesse.");
-            Console.WriteLine(" c : La troisième te permet de te reposer et de restaurer tes réserves d'eau, de charbon et de nourriture.");
-            Console.WriteLine(" d : La dernière qui te permet d'afficher le gestionnaire d'état.");
+            Console.WriteLine(" c : La dernière qui te permet d'afficher le gestionnaire d'état.");
             Console.WriteLine("Que fais-tu ?");
         }
 
@@ -106,12 +112,7 @@ namespace Jeu_du_chameau
                     Suite2();
                     break;
 
-                case "c":
-                    Console.WriteLine("tu te repose et tu recharge les réserves de ton train");
-                    Matin();
-                    break;
-
-                case "d": 
+                case "c": 
                     Console.WriteLine("Gestionnaire de l'UI");
                     UI();
                     break;
@@ -131,6 +132,7 @@ namespace Jeu_du_chameau
         {
             eau -= 1;
             charbon -= 1;
+            distance -= 1;
 
             if (eau > 0)
             {
@@ -146,6 +148,7 @@ namespace Jeu_du_chameau
         {
             eau -= 2;
             charbon -= 2;
+            distance -= 2;
 
             if (eau > 0)
             {
@@ -154,6 +157,29 @@ namespace Jeu_du_chameau
             else if (eau == 0)
             {
                 Die();
+            }
+        }
+
+        public static void Nuit()
+        {
+            Console.WriteLine("C'est la nuit.");
+            Console.WriteLine("tu arrive à une gare.");
+            Console.WriteLine("Veux-tu te reposer ?");
+            Console.WriteLine(" y : yes.");
+            Console.WriteLine(" n : no.");
+            Repos();
+        }
+
+        public static void Repos()
+        {
+            switch (Console.ReadLine())
+            {
+                case "y":
+                    Matin();
+                    break;
+
+                case "n":
+                    break;
             }
         }
 
@@ -175,7 +201,7 @@ namespace Jeu_du_chameau
 
         public static void Evenment()
         {
-
+            
         }
 
         public static void Die()
