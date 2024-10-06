@@ -73,19 +73,20 @@
 using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Collections;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Jeu_du_chameau
 {
     internal class Program
     {
         // pour garder en mémoire le nombre d'eau, de nourriture et de fatigue des personnages
-        static int eau = 10;
-        static int charbon = 10;
+        static int eau = 20;
+        static int charbon = 20;
         static int nourriture = 20;
-        static int distance = 250;
+        static int distance = 2500;
+        static int distanceParcourue = 0;
 
         static Random random = new Random();
-        static Random fuite = new Random();
 
         public static void Main()
         {
@@ -96,13 +97,14 @@ namespace Jeu_du_chameau
         // Texte d'histoire et d'explication pour le joueur
         public static void Debut()
         {
-            Console.WriteLine("Le monde dans lequelle vous vous trouvez a été détruits durant la dernière guerre.");
-            Console.WriteLine("seul vous et votre train êtes encore en vie");
-            Console.WriteLine("Vous venez de la ville de et votre voyage doit vous emenez jusqu'à la ville de , elle est connue comme étant la seule ville encore debout");
+            Console.WriteLine("Le monde dans lequel vous vous trouvez a été détruit durant la dernière guerre.");
+            Console.WriteLine("Seuls vous et votre train êtes encore en vie.");
+            Console.WriteLine("Vous venez de la ville de Soleanna et votre voyage doit vous mener jusqu'à la ville d'Hibernia, connue comme la seule ville encore debout.");
+
 
             Console.WriteLine("Pour conduire ton train tu as le choix entre 3 commandes : ");
-            Console.WriteLine(" a : La première consiste à faire avancer ton train à la vitesse normal.");
-            Console.WriteLine(" b : La seconde consiste à faire avancer ton train à plus grande vitesse.");
+            Console.WriteLine(" a : La première consiste à faire avancer ton train à vitesse normale.");
+            Console.WriteLine(" b : La seconde consiste à faire avancer ton train à une plus grande vitesse.");
             Console.WriteLine(" c : La dernière qui te permet d'afficher le gestionnaire d'état.");
             Console.WriteLine("Que veux-tu faire ?");
         }
@@ -110,15 +112,16 @@ namespace Jeu_du_chameau
         // Appeler au début du jeu grâce au Main() et permet de récupérer les touches du joueur
         public static void Command()
         {
+            
             switch (Console.ReadLine())
             {
                 case "a":
-                    Console.WriteLine("tu avance de 1");
+                    Console.WriteLine("tu avances de 10 km");
                     Vitesse1();
                     break;
 
                 case "b":
-                    Console.WriteLine("Tu avance de 2");
+                    Console.WriteLine("Tu avances de 20 km");
                     Vitesse2();
                     break;
 
@@ -128,9 +131,10 @@ namespace Jeu_du_chameau
                     break;
                 
                 default:
-                    Console.WriteLine("Tu t'ai trompé de touche !");
+                    Console.WriteLine("Tu t'es trompé de touche !");
                     Console.WriteLine("Que veux-tu faire ?");
                     Console.WriteLine("Tu as le choix entre : a, b ou c");
+                    Console.Beep();
                     Command();
                     break;
             }
@@ -139,10 +143,11 @@ namespace Jeu_du_chameau
         // permet d'afficher l'ui quand il est appeler
         public static void UI()
         {
-            Console.WriteLine("Eau : reste " + eau + " d'eau");
-            Console.WriteLine("Charbon : reste " + charbon + " de charbon");
-            Console.WriteLine("Nourriture : reste " + nourriture + " de nourriture");
-            Console.WriteLine("Distance : reste " + distance + " km de rail");
+            Console.WriteLine($"Eau restante : {eau} unités");
+            Console.WriteLine($"Charbon restant : {charbon} unités");
+            Console.WriteLine($"Nourriture restante : {nourriture} unités");
+            Console.WriteLine($"Distance restante : {distance} km");
+            Console.WriteLine($"Distance parcourue : {distanceParcourue} km");
             Command();
         }
 
@@ -151,33 +156,47 @@ namespace Jeu_du_chameau
         {
             eau -= 1;
             charbon -= 1;
-            distance -= 1;
+            distance -= 10;
+            distanceParcourue += 10;
 
-            Evenment(random);
+            if(distanceParcourue % 50 == 0)
+            {
+                Nuit();
+            }
 
-            if (eau > 0)
+            if (distanceParcourue % 30 == 0)
             {
-                Command();
+                Evenment();
             }
-            else if (eau == 0)
-            {
-                Die();
-            }
+
+            VerifiedRessources();
+            Command();
         }
 
         public static void Vitesse2()
         {
             eau -= 2;
             charbon -= 2;
-            distance -= 2;
+            distance -= 20;
+            distanceParcourue += 20;
 
-            Evenment(random);
-
-            if (eau > 0)
+            if (distanceParcourue % 50 == 0)
             {
-                Command();
+                Nuit();
             }
-            else if (eau == 0)
+
+            if(random.Next(25, 36) == 30)
+            {
+                Evenment();
+            }
+            
+           VerifiedRessources();
+            Command();
+        }
+
+        public static void VerifiedRessources()
+        {
+            if (charbon <= 0 || eau <= 0 || nourriture <= 0)
             {
                 Die();
             }
@@ -186,7 +205,7 @@ namespace Jeu_du_chameau
         public static void Nuit()
         {
             Console.WriteLine("C'est la nuit.");
-            Console.WriteLine("tu arrive à une gare.");
+            Console.WriteLine("Tu arrives à une gare.");
             Console.WriteLine("Veux-tu te reposer ?");
             Console.WriteLine(" y : yes.");
             Console.WriteLine(" n : no.");
@@ -202,99 +221,102 @@ namespace Jeu_du_chameau
                     break;
 
                 case "n":
+                    Console.WriteLine("Tu te décides à continuer ton chemin de nuit !");
+                    Command();
                     break;
 
                 default:
-                    Console.WriteLine("Tu t'ai trompé de touche !");
+                    Console.WriteLine("Tu t'es trompé de touche !");
                     Console.WriteLine("Que veux-tu faire ?");
                     Console.WriteLine("Tu as le choix entre : y ou n");
-                    Nuit();
+                    Console.Beep();
+                    Repos();
                     break;
             }
         }
 
         public static void Matin()
         {
-            nourriture -= 2;
-            eau +=1;
-            charbon += 1;
+            nourriture += 5;
+            eau +=5;
+            charbon += 5;
 
-            if (nourriture > 0)
-            {
-                Command();
-            }
-            else if (nourriture == 0)
+            if (nourriture <= 0 || eau <= 0 || charbon <= 0)
             {
                 Die();
             }
+            else
+            {
+                Command();
+            }
         }
 
-        public static void Evenment(Random random)
+        public static void Evenment()
         {
-            int eventNum = random.Next(0, 5);
+            int eventNum = random.Next(1, 4);
 
             switch (eventNum)
             {
                 case 1:
-                    probChar();
+                    ProbEau();
                     break;
 
                 case 2:
-                    probEau(fuite);
+                    ProbBan();
                     break;
 
                 case 3:
-                    probBan();
+                    ProbNei();
                     break;
-
-                case 4:
-                    probNei();
-                    break;
-                    
+                      
                 default :
                     Console.WriteLine("Il ne se passe rien aujourd'hui !");
+                    Command();
                     break;
             }
         }
 
-        public static void probChar()
+        public static void ProbEau()
         {
-            Console.WriteLine("Oh non, on va manquer de charbon !");
-        }
-
-        public static void probEau(Random fuite)
-        {
-            int eventNum = fuite.Next(0, 5);
-            switch (eventNum)
+            int eventFuite = random.Next(0, 3);
+            switch (eventFuite)
             {
                 case 1:
-                    Console.WriteLine("Oh non, le réservoire d'eau à une fuite !");
+                    Console.WriteLine("Oh non, le réservoir d'eau a une fuite !");
                     Console.WriteLine("Regarde avec la touche c pour vérifier ce qu'il te reste en eau !");
+                    eau -= 5;
+                    Command();
                     break;
                     
                 case 2:
-                    Console.WriteLine("Il ne se passe rien aujourd'hui !");
+                    Console.WriteLine("Pas de prôblème avec l'eau aujourd'hui !");
+                    Command();
                     break;
             }
         }
 
-        public static void probBan()
+        public static void ProbBan()
         {
-            Console.WriteLine("Oh non, des bandits nous attaque !");
+            Console.WriteLine("Oh non, des bandits nous attaquent !");
+            Console.WriteLine("Ils nous ont volé 6 de nourriture.");
+            nourriture -= 6;
+            Command();
         }
 
-        public static void probNei()
+        public static void ProbNei()
         {
             Console.WriteLine("Oh non, on va traverser une tempête de neige !");
+            Console.WriteLine("Nous avons utilisé 6 de charbon pour éviter que le moteur ne s'éteigne.");
+            charbon -= 6;
+            Command();
         }
 
         public static void Die()
         {
-            Console.WriteLine("Tu as perdue");
+            Console.WriteLine("Tu as perdu.");
             Console.WriteLine("Veux-tu recommencer ?");
             Console.WriteLine(" y : yes.");
             Console.WriteLine(" n : no.");
-            Console.Beep();
             Retry();
         }
 
@@ -303,23 +325,32 @@ namespace Jeu_du_chameau
             switch (Console.ReadLine())
             {
                 case "y":
-                    eau = 10;
-                    charbon = 10;
-                    nourriture = 20;
-                    distance = 250;
+                    ResetGame();
                     Main();
                     break;
 
                 case "n":
+                    Console.WriteLine("Merci d'avoir joué !");
+                    Environment.Exit(0);
                     break;
                     
                 default:
-                    Console.WriteLine("Tu t'ai trompé de touche !");
+                    Console.WriteLine("Tu t'es trompé de touche !");
                     Console.WriteLine("Que veux-tu faire ?");
                     Console.WriteLine("Tu as le choix entre : y ou n");
-                    Die();
+                    Console.Beep();
+                    Retry();
                     break;
             }
+        }
+
+        public static void ResetGame()
+        {
+            eau = 20;
+            charbon = 20;
+            nourriture = 20;
+            distance = 2500;
+            distanceParcourue = 0;
         }
     }
 }
