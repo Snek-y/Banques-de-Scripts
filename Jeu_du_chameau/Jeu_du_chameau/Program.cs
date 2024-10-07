@@ -185,7 +185,7 @@ namespace Jeu_du_chameau
                 Nuit();
             }
 
-            if(random.Next(25, 36) == 30)
+            if(distanceParcourue % 30 == 0)
             {
                 Evenment();
             }
