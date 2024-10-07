@@ -70,13 +70,18 @@
 ///          - Surchauffe moteur (lier à l'événement fuite d'eau)
 ///          - Seulement si possible : Explosion du moteur (lier à l'événement fuite d'eau)
 
-using Microsoft.VisualBasic.FileIO;
-using System;
-using System.Collections;
-using System.Reflection.Metadata.Ecma335;
+
 
 namespace Jeu_du_chameau
 {
+    using Microsoft.VisualBasic.FileIO;
+    using System;
+    using System.Collections;
+    using System.ComponentModel;
+    using System.Reflection.Metadata.Ecma335;
+    using NAudio.Wave;
+    using System.Threading;
+
     internal class Program
     {
         // pour garder en mémoire le nombre d'eau, de nourriture et de fatigue des personnages
@@ -90,8 +95,19 @@ namespace Jeu_du_chameau
 
         public static void Main()
         {
+            string filepath = @"C:\Users\rebel\Documents\GitHub\Banques-de-Scripts\Jeu_du_chameau\PlayMusic\The-Legend-of-Zelda-Spirit-Tracks-Music-Realm-Overworld.wav";
+
+            Thread musicThread = new Thread(() => PlayMusic(filepath));
+            musicThread.IsBackground = true;
+            musicThread.Start();
+
             Debut();
             Command();
+
+            while (true)
+            {
+                var key = Console.ReadKey(intercept: true).Key;
+            }
         }
 
         // Texte d'histoire et d'explication pour le joueur
@@ -116,12 +132,12 @@ namespace Jeu_du_chameau
             switch (Console.ReadLine())
             {
                 case "a":
-                    Console.WriteLine("tu avances de 10 km");
+                    Console.WriteLine("tu avances de 20 km");
                     Vitesse1();
                     break;
 
                 case "b":
-                    Console.WriteLine("Tu avances de 20 km");
+                    Console.WriteLine("Tu avances de 40 km");
                     Vitesse2();
                     break;
 
@@ -156,8 +172,8 @@ namespace Jeu_du_chameau
         {
             eau -= 1;
             charbon -= 1;
-            distance -= 10;
-            distanceParcourue += 10;
+            distance -= 20;
+            distanceParcourue += 20;
 
             if(distanceParcourue % 50 == 0)
             {
@@ -177,8 +193,8 @@ namespace Jeu_du_chameau
         {
             eau -= 2;
             charbon -= 2;
-            distance -= 20;
-            distanceParcourue += 20;
+            distance -= 40;
+            distanceParcourue += 40;
 
             if (distanceParcourue % 50 == 0)
             {
@@ -191,6 +207,7 @@ namespace Jeu_du_chameau
             }
             
            VerifiedRessources();
+            VerifiedDistance();
             Command();
         }
 
@@ -199,6 +216,14 @@ namespace Jeu_du_chameau
             if (charbon <= 0 || eau <= 0 || nourriture <= 0)
             {
                 Die();
+            }
+        }
+
+        public static void VerifiedDistance()
+        {
+            if (distance <= 0)
+            {
+                Victory();
             }
         }
 
@@ -237,23 +262,17 @@ namespace Jeu_du_chameau
 
         public static void Matin()
         {
-            nourriture += 5;
-            eau +=5;
-            charbon += 5;
-
-            if (nourriture <= 0 || eau <= 0 || charbon <= 0)
-            {
-                Die();
-            }
-            else
-            {
-                Command();
-            }
+            nourriture -= 5;
+            eau  = Math.Min(eau + 10, 20);
+            charbon = Math.Min(charbon +10, 20);
+            
+            VerifiedRessources();
+            Command();
         }
 
         public static void Evenment()
         {
-            int eventNum = random.Next(1, 4);
+            int eventNum = random.Next(1, 5);
 
             switch (eventNum)
             {
@@ -267,6 +286,10 @@ namespace Jeu_du_chameau
 
                 case 3:
                     ProbNei();
+                    break;
+                
+                case 4:
+                    Bouffe();
                     break;
                       
                 default :
@@ -282,33 +305,85 @@ namespace Jeu_du_chameau
             switch (eventFuite)
             {
                 case 1:
-                    Console.WriteLine("Oh non, le réservoir d'eau a une fuite !");
+                    Console.WriteLine("Oh non, le réservoir d'eau a une fuite, nous avons perdue 5 unités d'eau !");
                     Console.WriteLine("Regarde avec la touche c pour vérifier ce qu'il te reste en eau !");
                     eau -= 5;
-                    Command();
                     break;
                     
                 case 2:
                     Console.WriteLine("Pas de prôblème avec l'eau aujourd'hui !");
-                    Command();
                     break;
             }
+
+            Command();
         }
 
         public static void ProbBan()
         {
-            Console.WriteLine("Oh non, des bandits nous attaquent !");
-            Console.WriteLine("Ils nous ont volé 6 de nourriture.");
-            nourriture -= 6;
+            int eventBandie = random.Next(0, 3);
+            switch (eventBandie)
+            {
+                case 1:
+                    Console.WriteLine("Nous avons croisez des bandits et ils nous ont volé de la nourriture !");
+                    Console.WriteLine($"Ils nous ont volé 5 unités de nourriture.");
+                    nourriture -= 5;
+                    break;
+                
+                case 2:
+                    Console.WriteLine("Nous avons croiser des bandits mais heureusement ils ne nous ont rien voler !");
+                    break;
+
+            }
+
             Command();
         }
 
         public static void ProbNei()
         {
-            Console.WriteLine("Oh non, on va traverser une tempête de neige !");
-            Console.WriteLine("Nous avons utilisé 6 de charbon pour éviter que le moteur ne s'éteigne.");
-            charbon -= 6;
+            int eventNeige = random.Next(0, 3);
+            switch (eventNeige)
+            {
+                case 1:
+                    Console.WriteLine("Nous avons traversons une tempête de neige, nous devons utiliser plus de charbon pour garder la chaudière chaude !");
+                    Console.WriteLine($"Nous avons perdue 5 unités de charbon.");
+                    charbon -= 5;
+                    break;
+
+                case 2:
+                    Console.WriteLine("La tempête de neige est heureusement passé loin du train !");
+                    break;
+
+            }
+
             Command();
+        }
+
+        public static void Bouffe()
+        {
+            Console.WriteLine("Tu as trouver une caisse de nourriture sur les rails.");
+            Console.WriteLine("Veux-tu la récupéré ?");
+            Console.WriteLine(" y : yes.");
+            Console.WriteLine(" n : no.");
+
+            switch (Console.ReadLine())
+            {
+                case "y":
+                    Console.WriteLine("tu récupère 5 unités de nourritures");
+                    nourriture += 5;
+                    Command();
+                    break;
+
+                case "n":
+                    Console.WriteLine("tu ne récupère pas de nourriture");
+                    Command();
+                    break;
+                
+                default:
+                    Console.Beep();
+                    Console.WriteLine("Tu t'es trompé de touche !");
+                    Bouffe();
+                    break;
+            }
         }
 
         public static void Die()
@@ -351,6 +426,21 @@ namespace Jeu_du_chameau
             nourriture = 20;
             distance = 2500;
             distanceParcourue = 0;
+        }
+
+        public static void Victory()
+        {
+            Console.WriteLine("Bravo, tu as gagné !");
+        }
+
+        public static void PlayMusic(string filepath)
+        {
+            using (var audioFile = new AudioFileReader(filepath))
+            using (var outputDevice = new WaveOutEvent())
+            {
+                outputDevice.Init(audioFile);
+                outputDevice.Play();
+            }
         }
     }
 }
