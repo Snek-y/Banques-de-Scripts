@@ -15,6 +15,7 @@
 
 // 3. Actions possibles à chaque tour :
 //                - Avancer à vitesse normale
+
 //                - Avancer rapidement (couvre plus de distance mais fatigue plus le chameau)
 //                - Se reposer (récupère de la fatigue mais consomme des ressources)
 //                - Chercher de l'eau/nourriture (chance de trouver des ressources mais risque de rencontrer des dangers)
@@ -30,12 +31,12 @@
 //              - Défaite : manquer de ressources vitales ou rencontrer un danger fatal
 
 //idées pour la réalisation en programmation :
-//             - Structure : Utilisez une boucle principale pour les tours de jeu.
-//             - Gestion de l'état : créez des variables pour suivre les ressources et la distance parcourue.
-//             - Intéractivité : Utilisez des entrées utilisateur pour les choix d'actions.
-//             - Evénements aléatoires : Implémentez un générateur de nombres aléatoires pour déclencher des événements.
-//             - Affichage : Créez des fonctions pour affichez l'état du jeu et les messages.
-//             - Logique de jeu : Implémentez des fonctions pour chaque action et événement possible.
+///             - Structure : Utilisez une boucle principale pour les tours de jeu.
+///             - Gestion de l'état : créez des variables pour suivre les ressources et la distance parcourue.
+///             - Intéractivité : Utilisez des entrées utilisateur pour les choix d'actions.
+///             - Evénements aléatoires : Implémentez un générateur de nombres aléatoires pour déclencher des événements.
+///             - Affichage : Créez des fonctions pour affichez l'état du jeu et les messages.
+///             - Logique de jeu : Implémentez des fonctions pour chaque action et événement possible.
 
 
 
@@ -43,48 +44,18 @@
 
 
 
-
-
-
-
-
-
-
-/// Itération GD du jeu du chameau :
-/// Le joueur est conducteur d'un train à vapeur et il devra gérer le moteur de sa locomotive et son énergie pour remplir le moteur en charbon et en eau.
-/// Le train peut avancer à vitesse normal cela consomme un charbon et un d'eau.
-/// Le train peut avancer à vitesse rapide cela consomme deux charbons et deux d'eau.
-/// La nourriture du joueur sert durant la journée pour le contrôle le train.
-/// à la fin de chaque tour le train récupère un peu de charbon et un peu d'eau pour continuer le voyage.
-/// rajouter un choix d'éguillage.
-/// Gestion de l'état :
-///          - nourriture pour le joueur. 
-///          - eau de refroidissement moteur du train.
-///          - Charbon pour faire avancer le train.
-///          - La distance restante à parcourir.
-/// événement aléatoire :
-///          - Panne de charbon (parce que l'on a mal géré notre réserve de charbon).
-///          - fuite d'eau
-///          - bandits
-///          - Tempête de neige
-///          - Surchauffe moteur (lier à l'événement fuite d'eau)
-///          - Seulement si possible : Explosion du moteur (lier à l'événement fuite d'eau)
 
 
 
 namespace Jeu_du_chameau
 {
-    using Microsoft.VisualBasic.FileIO;
     using System;
-    using System.Collections;
-    using System.ComponentModel;
-    using System.Reflection.Metadata.Ecma335;
     using NAudio.Wave;
     using System.Threading;
 
     internal class Program
     {
-        // pour garder en mémoire le nombre d'eau, de nourriture et de fatigue des personnages
+        // pour garder en mémoire le nombre d'eau, de nourriture et de nourriture du personnage
         static int eau = 20;
         static int charbon = 20;
         static int nourriture = 20;
@@ -144,7 +115,7 @@ namespace Jeu_du_chameau
             Console.WriteLine("Pour conduire ton train tu as le choix entre 3 commandes : ");
             Console.WriteLine(" a : La première consiste à faire avancer ton train à vitesse normale.");
             Console.WriteLine(" b : La seconde consiste à faire avancer ton train à une plus grande vitesse.");
-            Console.WriteLine(" c : La dernière qui te permet d'afficher le gestionnaire d'état.");
+            Console.WriteLine(" c : La dernière qui te permet d'afficher le gestionnaire des ressources.");
             Console.WriteLine("Que veux-tu faire ?");
         }
 
@@ -165,7 +136,7 @@ namespace Jeu_du_chameau
                     break;
 
                 case "c": 
-                    Console.WriteLine("Gestionnaire de l'UI");
+                    Console.WriteLine("Gestionnaire de l'interface de gestion des ressources");
                     UI();
                     break;
                 
@@ -254,7 +225,7 @@ namespace Jeu_du_chameau
         {
             Console.WriteLine("C'est la nuit.");
             Console.WriteLine("Tu arrives à une gare.");
-            Console.WriteLine("Veux-tu te reposer ?");
+            Console.WriteLine("Veux-tu t'arrêter ?");
             Console.WriteLine(" y : yes.");
             Console.WriteLine(" n : no.");
             Repos();
@@ -286,7 +257,9 @@ namespace Jeu_du_chameau
         public static void Matin()
         {
             nourriture -= 5;
+            // rajoute 10 d'eau mais ne permet pas de faire dépasser la capacité max d'eau.
             eau  = Math.Min(eau + 10, 20);
+            // rajoute 10 de charbon mais ne permet pas de faire dépasser la capacité max de charbon.
             charbon = Math.Min(charbon +10, 20);
             
             VerifiedRessources();
@@ -348,7 +321,7 @@ namespace Jeu_du_chameau
             {
                 case 1:
                     Console.WriteLine("Nous avons croisez des bandits et ils nous ont volé de la nourriture !");
-                    Console.WriteLine($"Ils nous ont volé 5 unités de nourriture.");
+                    Console.WriteLine("Ils nous ont volé 5 unités de nourriture.");
                     nourriture -= 5;
                     break;
                 
@@ -367,8 +340,8 @@ namespace Jeu_du_chameau
             switch (eventNeige)
             {
                 case 1:
-                    Console.WriteLine("Nous avons traversons une tempête de neige, nous devons utiliser plus de charbon pour garder la chaudière chaude !");
-                    Console.WriteLine($"Nous avons perdue 5 unités de charbon.");
+                    Console.WriteLine("Nous allons traverser une tempête de neige, nous devons utiliser plus de charbon pour garder la chaudière chaude !");
+                    Console.WriteLine("Nous avons perdue 5 unités de charbon.");
                     charbon -= 5;
                     break;
 
