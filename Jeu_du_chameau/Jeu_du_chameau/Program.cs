@@ -95,19 +95,8 @@ namespace Jeu_du_chameau
 
         public static void Main()
         {
-            string filepath = @"C:\Users\rebel\Documents\GitHub\Banques-de-Scripts\Jeu_du_chameau\PlayMusic\The-Legend-of-Zelda-Spirit-Tracks-Music-Realm-Overworld.wav";
-
-            Thread musicThread = new Thread(() => PlayMusic(filepath));
-            musicThread.IsBackground = true;
-            musicThread.Start();
-
             Debut();
             Command();
-
-            while (true)
-            {
-                var key = Console.ReadKey(intercept: true).Key;
-            }
         }
 
         // Texte d'histoire et d'explication pour le joueur
@@ -431,16 +420,6 @@ namespace Jeu_du_chameau
         public static void Victory()
         {
             Console.WriteLine("Bravo, tu as gagné !");
-        }
-
-        public static void PlayMusic(string filepath)
-        {
-            using (var audioFile = new AudioFileReader(filepath))
-            using (var outputDevice = new WaveOutEvent())
-            {
-                outputDevice.Init(audioFile);
-                outputDevice.Play();
-            }
         }
     }
 }
