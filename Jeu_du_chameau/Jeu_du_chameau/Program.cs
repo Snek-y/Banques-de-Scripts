@@ -95,8 +95,42 @@ namespace Jeu_du_chameau
 
         public static void Main()
         {
+            Thread musicThread = new Thread(PlayBackgroundMusic);
+            musicThread.IsBackground = true;
+            musicThread.Start();
+
             Debut();
             Command();
+        }
+
+        public static void PlayBackgroundMusic()
+        {
+            try
+            {
+                string cheminFichier = @"C:\Users\rebel\Documents\GitHub\Banques-de-Scripts\Jeu_du_chameau\Jeu_du_chameau\The-Legend-of-Zelda-Spirit-Tracks-Music-Realm-Overworld.wav";
+                if (!System.IO.File.Exists(cheminFichier))
+                {
+                    Console.WriteLine("Le fichier audio est introuvable !");
+                    return;
+                }
+
+                using (var audioFile = new AudioFileReader(cheminFichier))
+                using (var outputDevice = new WaveOutEvent())
+                {
+                    outputDevice.Init(audioFile);
+                    outputDevice.Play();
+
+                    // Maintenir la lecture tant qu'elle est active
+                    while (outputDevice.PlaybackState == PlaybackState.Playing)
+                    {
+                        Thread.Sleep(1000); // Pause pour éviter de surcharger le CPU
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erreur lors de la lecture de la musique : {ex.Message}");
+            }
         }
 
         // Texte d'histoire et d'explication pour le joueur
