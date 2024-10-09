@@ -385,7 +385,7 @@ namespace Jeu_du_chameau
         public static void Die()
         {
             Console.WriteLine("Tu as perdu.");
-            Console.WriteLine("Veux-tu recommencer ?");
+            Console.WriteLine("Veux-tu rejouer ?");
             Console.WriteLine(" y : yes.");
             Console.WriteLine(" n : no.");
             Retry();
@@ -427,6 +427,8 @@ namespace Jeu_du_chameau
         public static void Victory()
         {
             Console.WriteLine("Bravo, tu as gagné !");
+            Console.WriteLine("Merci d'avoir jouer !");
+            Environment.Exit(0);
         }
     }
 }
