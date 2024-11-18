@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class TabloManager : MonoBehaviour
+public class TabloManager :
 {
     public float smooth = 2.0f;
     public Vector3 openPositionOffset = new Vector3(0, 0, 0);
